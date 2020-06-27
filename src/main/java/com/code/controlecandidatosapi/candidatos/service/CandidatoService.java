@@ -5,6 +5,7 @@ import com.code.controlecandidatosapi.candidatos.mapper.CandidatoMapper;
 import com.code.controlecandidatosapi.candidatos.model.Candidato;
 import com.code.controlecandidatosapi.candidatos.repository.CandidatoRepository;
 import com.code.controlecandidatosapi.exception.ValidacaoException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,9 @@ public class CandidatoService {
 
     @Transactional
     public Candidato alterar(CandidatoRequest request) {
-        return repository.save(CandidatoMapper.INSTANCE.of(request));
+        var candidato = this.findById(request.getId());
+        BeanUtils.copyProperties(CandidatoMapper.INSTANCE.of(request), candidato);
+        return repository.save(candidato);
     }
 
     public Candidato findById(Integer id) {

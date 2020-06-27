@@ -5,6 +5,7 @@ import com.code.controlecandidatosapi.cartao.mapper.CartaoMapper;
 import com.code.controlecandidatosapi.cartao.model.Cartao;
 import com.code.controlecandidatosapi.cartao.repository.CartaoRepository;
 import com.code.controlecandidatosapi.exception.ValidacaoException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,10 @@ public class CartaoService {
 
     @Transactional
     public Cartao alterar(CartaoRequest request) {
-        return repository.save(CartaoMapper.INSTANCE.of(request));
+        var cartao = this.findById(request.getId());
+        BeanUtils.copyProperties(CartaoMapper.INSTANCE.of(request), cartao);
+        return repository.save(cartao
+        );
     }
 
     public Cartao findById(Integer id) {
