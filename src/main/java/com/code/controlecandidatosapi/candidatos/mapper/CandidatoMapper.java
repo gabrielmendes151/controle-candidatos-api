@@ -27,6 +27,7 @@ public interface CandidatoMapper {
     @Mapping(source = "nome", target = "nome")
     @Mapping(source = "email", target = "email")
     @Mapping(source = "cpf", target = "cpf")
+    @Mapping(source = "dataCadastro", target = "dataCadastro")
     CandidatoResponse of(Candidato candidato);
 
     @BeforeMapping

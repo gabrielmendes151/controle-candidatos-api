@@ -39,6 +39,7 @@ public class CandidatoService {
 
     @Transactional
     public void deletar(Integer id) {
-        repository.deleteById(id);
+        var candidato = this.findById(id);
+        repository.delete(candidato);
     }
 }

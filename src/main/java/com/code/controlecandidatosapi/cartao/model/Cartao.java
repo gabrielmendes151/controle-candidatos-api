@@ -39,7 +39,7 @@ public class Cartao {
     @Column(name = "DATA_VENCIMENTO", length = 5)
     private String dataVencimento;
 
-    @Column(name = "DATA_CADASTRO")
+    @Column(name = "DATA_CADASTRO", updatable = false)
     private LocalDateTime dataCadastro;
 
     @PrePersist

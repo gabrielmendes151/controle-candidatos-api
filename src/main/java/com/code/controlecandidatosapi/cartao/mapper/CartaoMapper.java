@@ -18,6 +18,7 @@ public interface CartaoMapper {
     @Mapping(source = "numero", target = "numero")
     @Mapping(source = "codigoSeguranca", target = "codigoSeguranca")
     @Mapping(source = "dataVencimento", target = "dataVencimento")
+    @Mapping(source = "dataCadastro", target = "dataCadastro")
     CartaoResponse of(Cartao cartao);
 
     @Mapping(source = "id", target = "id")

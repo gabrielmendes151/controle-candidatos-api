@@ -33,6 +33,7 @@ public class Candidato {
     @Column(name = "cpf")
     private String cpf;
 
+    @Column(name = "DATA_CADASTRO", updatable = false)
     private LocalDateTime dataCadastro;
 
     @JoinTable(name = "CANDIDATO_CARTAO",

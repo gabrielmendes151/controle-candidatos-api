@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
@@ -19,4 +20,5 @@ public class CandidatoResponse {
     private String email;
     private String cpf;
     private Set<CartaoResponse> cartoes;
+    private LocalDateTime dataCadastro;
 }

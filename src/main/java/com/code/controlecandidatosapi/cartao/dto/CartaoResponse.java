@@ -18,4 +18,5 @@ public class CartaoResponse {
     private String numero;
     private String codigoSeguranca;
     private String dataVencimento;
+    private String dataCadastro;
 }

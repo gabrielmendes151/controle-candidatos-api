@@ -39,6 +39,7 @@ public class CartaoService {
 
     @Transactional
     public void deletar(Integer id) {
-        repository.deleteById(id);
+        var cartao = this.findById(id);
+        repository.delete(cartao);
     }
 }
