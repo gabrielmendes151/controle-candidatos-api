@@ -19,7 +19,7 @@ public class Cartao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CARTAO")
-    @SequenceGenerator(name = "SEQ_CARTAO", sequenceName = "SEQ_CARTAO")
+    @SequenceGenerator(name = "SEQ_CARTAO", sequenceName = "SEQ_CARTAO", allocationSize = 1)
     @Column(name = "ID")
     private Integer id;
 
