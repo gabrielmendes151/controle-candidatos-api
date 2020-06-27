@@ -2,6 +2,7 @@ package com.code.controlecandidatosapi.candidatos.controller;
 
 import com.code.controlecandidatosapi.candidatos.dto.CandidatoRequest;
 import com.code.controlecandidatosapi.candidatos.dto.CandidatoResponse;
+import com.code.controlecandidatosapi.candidatos.mapper.CandidatoMapper;
 import com.code.controlecandidatosapi.candidatos.service.CandidatoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,23 +21,23 @@ public class CandidatoController {
     @GetMapping
     public List<CandidatoResponse> getAll(){
         return service.getAll().stream()
-            .map(CandidatoResponse::of)
+            .map(CandidatoMapper.INSTANCE::of)
             .collect(Collectors.toList());
     }
 
     @PostMapping
     public CandidatoResponse salvar(@Valid @RequestBody CandidatoRequest request){
-        return CandidatoResponse.of(service.salvar(request));
+        return CandidatoMapper.INSTANCE.of(service.salvar(request));
     }
 
     @PutMapping
     public CandidatoResponse alterar(@Valid @RequestBody CandidatoRequest request){
-        return CandidatoResponse.of(service.alterar(request));
+        return CandidatoMapper.INSTANCE.of(service.alterar(request));
     }
 
     @GetMapping("{id}")
     public CandidatoResponse getById(@PathVariable Integer id){
-        return CandidatoResponse.of(service.findById(id));
+        return CandidatoMapper.INSTANCE.of(service.findById(id));
     }
 
     @DeleteMapping("{id}")

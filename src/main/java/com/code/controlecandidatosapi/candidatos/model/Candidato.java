@@ -1,12 +1,10 @@
 package com.code.controlecandidatosapi.candidatos.model;
 
-import com.code.controlecandidatosapi.candidatos.dto.CandidatoRequest;
 import com.code.controlecandidatosapi.cartao.model.Cartao;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -50,12 +48,5 @@ public class Candidato {
     @PrePersist
     public void prePersist() {
         dataCadastro = LocalDateTime.now();
-    }
-
-    public static Candidato of(CandidatoRequest request) {
-        var candidato = new Candidato();
-        BeanUtils.copyProperties(request, candidato);
-        candidato.setCartoes(Cartao.of(request.getCartoes()));
-        return candidato;
     }
 }

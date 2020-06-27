@@ -1,6 +1,7 @@
 package com.code.controlecandidatosapi.candidatos.service;
 
 import com.code.controlecandidatosapi.candidatos.dto.CandidatoRequest;
+import com.code.controlecandidatosapi.candidatos.mapper.CandidatoMapper;
 import com.code.controlecandidatosapi.candidatos.model.Candidato;
 import com.code.controlecandidatosapi.candidatos.repository.CandidatoRepository;
 import com.code.controlecandidatosapi.exception.ValidacaoException;
@@ -24,12 +25,12 @@ public class CandidatoService {
 
     @Transactional
     public Candidato salvar(CandidatoRequest request) {
-        return repository.save(Candidato.of(request));
+        return repository.save(CandidatoMapper.INSTANCE.of(request));
     }
 
     @Transactional
     public Candidato alterar(CandidatoRequest request) {
-        return repository.save(Candidato.of(request));
+        return repository.save(CandidatoMapper.INSTANCE.of(request));
     }
 
     public Candidato findById(Integer id) {
