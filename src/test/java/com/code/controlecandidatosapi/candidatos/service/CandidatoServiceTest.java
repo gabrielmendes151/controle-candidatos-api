@@ -91,20 +91,21 @@ public class CandidatoServiceTest {
             .setDataCadastro(LocalDateTime.of(2020, 6, 27, 8, 0, 0));
         candidato.setDataCadastro(LocalDateTime.of(2020, 6, 27, 8, 0, 0));
         when(repository.save(any())).thenReturn(candidato);
+        when(repository.findById(any())).thenReturn(Optional.of(candidato));
 
-        var candidatoAlterado = service.alterar(umCandidatoRequest());
+        var candidatoReq = umCandidatoRequest();
+        candidatoReq.setId(1);
+        candidatoReq.getCartoes().iterator().next().setId(1);
+        var candidatoAlterado = service.alterar(candidatoReq);
         assertThat(candidatoAlterado.getId()).isEqualTo(1);
-        assertThat(candidatoAlterado.getDataCadastro()).isNotNull();
-        assertThat(candidatoAlterado.getNome()).isEqualTo("Gabriel");
-        assertThat(candidatoAlterado.getEmail()).isEqualTo("gabrielmendes@email.com");
-        assertThat(candidatoAlterado.getCpf()).isEqualTo("12282244190");
+        assertThat(candidatoAlterado.getNome()).isEqualTo("Jose");
+        assertThat(candidatoAlterado.getEmail()).isEqualTo("jose@email.com");
+        assertThat(candidatoAlterado.getCpf()).isEqualTo("12283344190");
         assertThat(candidatoAlterado.getCartoes())
             .hasSize(1)
-            .extracting("id", "bandeira", "dataVencimento", "numero", "titular", "codigoSeguranca",
-                "dataCadastro")
+            .extracting("id", "bandeira", "dataVencimento", "numero", "titular", "codigoSeguranca")
             .containsExactly(
-                tuple(1, EBandeira.MASTERCARD, "02/90", "448545649892", "GABRIEL TESTE", "111",
-                    LocalDateTime.of(2020, 6, 27, 8, 0, 0))
+                tuple(1, EBandeira.ELO, "02/99", "448545699898", "JOSE TESTE", "000")
             );
     }
 

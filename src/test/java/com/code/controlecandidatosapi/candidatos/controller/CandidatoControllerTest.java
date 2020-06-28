@@ -2,6 +2,7 @@ package com.code.controlecandidatosapi.candidatos.controller;
 
 import com.code.controlecandidatosapi.candidatos.service.CandidatoService;
 import lombok.SneakyThrows;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -23,9 +28,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @WebMvcTest(CandidatoController.class)
+@ActiveProfiles("test")
 public class CandidatoControllerTest {
 
     private static final String PATH = "/api/candidatos";
@@ -34,10 +41,18 @@ public class CandidatoControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private CandidatoService service;
+    @Autowired
+    private WebApplicationContext webApplicationContex;
 
-    @SneakyThrows
+    @Before
+    public void setup(){
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContex).build();
+    }
+
     @Test
-    public void getAll_candidatos_quandoPossuir() {
+    @SneakyThrows
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    public void getAll_candidatos_quandoPossuirAutenticacao() {
         when(service.getAll()).thenReturn(List.of(umCandidato(), umCandidato()));
         mockMvc.perform(get(PATH))
             .andExpect(status().isOk())
@@ -46,6 +61,7 @@ public class CandidatoControllerTest {
 
     @SneakyThrows
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void salvar_salvaCandidato_quandoInformacoesOk() {
         var candidato = umCandidato();
         candidato.setId(1);
@@ -53,7 +69,8 @@ public class CandidatoControllerTest {
 
         mockMvc.perform(post(PATH)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(convertObjectToJsonBytes(umCandidatoRequest())))
+            .content(convertObjectToJsonBytes(umCandidatoRequest()))
+            .characterEncoding("utf-8"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.nome", is("Gabriel")))
@@ -68,6 +85,7 @@ public class CandidatoControllerTest {
 
     @SneakyThrows
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void alterar_alteraCandidato_quandoInformacoesOk() {
         var candidato = umCandidato();
         candidato.setId(1);
@@ -75,7 +93,8 @@ public class CandidatoControllerTest {
 
         mockMvc.perform(put(PATH)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(convertObjectToJsonBytes(umCandidatoRequest())))
+            .content(convertObjectToJsonBytes(umCandidatoRequest()))
+            .characterEncoding("utf-8"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.nome", is("Gabriel")))
@@ -90,6 +109,7 @@ public class CandidatoControllerTest {
 
     @SneakyThrows
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void getById_candidato_quandoPossuir() {
         when(service.findById(any())).thenReturn(umCandidato());
         mockMvc.perform(get(PATH)

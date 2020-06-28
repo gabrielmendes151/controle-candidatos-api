@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/cartoes")
-@CrossOrigin
 public class CartaoController {
 
     @Autowired

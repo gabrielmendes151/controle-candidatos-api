@@ -2,6 +2,7 @@ package com.code.controlecandidatosapi.cartao.controller;
 
 import com.code.controlecandidatosapi.cartao.service.CartaoService;
 import lombok.SneakyThrows;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -27,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @WebMvcTest(CartaoController.class)
+@ActiveProfiles("test")
 public class CartaoControllerTest {
 
     private static final String PATH = "/api/cartoes";
@@ -35,9 +41,17 @@ public class CartaoControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private CartaoService service;
+    @Autowired
+    private WebApplicationContext webApplicationContex;
+
+    @Before
+    public void setup(){
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContex).build();
+    }
 
     @SneakyThrows
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     public void getAll_cartoes_quandoPossuir() {
         when(service.getAll()).thenReturn(List.of(umCartao(), umCartao()));
         mockMvc.perform(get(PATH))
@@ -47,6 +61,7 @@ public class CartaoControllerTest {
 
     @SneakyThrows
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     public void salvar_salvaCartao_quandoInformacoesOk() {
         var cartao = umCartao();
         cartao.setId(1);
@@ -54,7 +69,8 @@ public class CartaoControllerTest {
 
         mockMvc.perform(post(PATH)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(convertObjectToJsonBytes(umCandidatoRequest())))
+            .content(convertObjectToJsonBytes(umCandidatoRequest()))
+            .characterEncoding("utf-8"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.titular", is("GABRIEL TESTE")))
@@ -66,6 +82,7 @@ public class CartaoControllerTest {
 
     @SneakyThrows
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     public void alterar_alteraCartao_quandoInformacoesOk() {
         var cartao = umCartao();
         cartao.setId(1);
@@ -73,7 +90,8 @@ public class CartaoControllerTest {
 
         mockMvc.perform(post(PATH)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(convertObjectToJsonBytes(umCandidatoRequest())))
+            .content(convertObjectToJsonBytes(umCandidatoRequest()))
+            .characterEncoding("utf-8"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.titular", is("GABRIEL TESTE")))
@@ -85,6 +103,7 @@ public class CartaoControllerTest {
 
     @SneakyThrows
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     public void getById_cartao_quandoPossuir() {
         when(service.findById(any())).thenReturn(umCartao());
         mockMvc.perform(get(PATH)
