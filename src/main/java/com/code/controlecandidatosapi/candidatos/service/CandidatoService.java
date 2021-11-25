@@ -20,6 +20,7 @@ public class CandidatoService {
     @Autowired
     private CandidatoRepository repository;
 
+
     public List<Candidato> getAll() {
         return repository.findAll();
     }
